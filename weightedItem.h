@@ -1,6 +1,9 @@
 #ifndef WEIGHTEDITEM_H
 #define WEIGHTEDITEM_H
 
+#include <iostream>
+
+// Class declaration
 template <class T>
 class WeightedItem {
  public:
@@ -64,11 +67,28 @@ class WeightedItem {
      */
     void remove_weight(unsigned value);
 
+    /**
+     * Function:    input
+     *              inputs the data and the weight separated by whitespace
+     *
+     * @param ins - input stream
+     */
+    void input(std::istream& ins);
+
+    /**
+     * Function:    output
+     *              outputs the data and weight separated by a dash
+     *
+     * @param outs - output stream
+     */
+    void output(std::ostream& outs) const;
+
  private:
     T data;           // data stored in container
     unsigned weight;  // weight of the container
 };
 
+// Class Implementation
 template <class T>
 WeightedItem<T>::WeightedItem(T d, unsigned value) {
     data = d;
@@ -108,6 +128,51 @@ void WeightedItem<T>::remove_weight(unsigned value) {
     else {
         weight -= value;
     }
+}
+
+template <class T>
+void WeightedItem<T>::input(std::istream& ins) {
+    ins >> std::ws;
+    ins >> data;
+    ins >> std::ws;
+    ins >> weight;
+}
+
+template <class T>
+void WeightedItem<T>::output(std::ostream& outs) const {
+    outs << data;
+    outs << " - ";
+    outs << weight;
+}
+
+// Non-member functions implementation
+
+/**
+ * Function:    operator<<
+ *              overloaded << operator to output a WeightedItem with the data it holds then the weight
+ *
+ * @param outs - output stream
+ * @param item - a WeightedItem
+ * @return - output stream
+ */
+template <class T>
+std::ostream& operator<<(std::ostream& outs, const WeightedItem<T>& item) {
+    item.output(outs);
+    return outs;
+}
+
+/**
+ * Function:    operator>>
+ *              overloaded >> operator to input data to the WeightedItem object
+ *
+ * @param ins - input stream
+ * @param item - a WeightedItem
+ * @return - input stream
+ */
+template <class T>
+std::istream& operator>>(std::istream& ins, WeightedItem<T>& item) {
+    item.input(ins);
+    return ins;
 }
 
 #endif
