@@ -83,6 +83,24 @@ class WeightedItem {
      */
     void output(std::ostream& outs) const;
 
+    /**
+     * Function:    operator=
+     *              assigns the same values of other to this current object
+     *
+     * @param other - right hand object
+     * @return - WeightedItem object
+     */
+    WeightedItem<T>& operator=(const WeightedItem<T>& other);
+
+    /**
+     * Function:    operator==
+     *              overloaded equality symbol, returns true if both data and weight are the same
+     *
+     * @param other - right hand side object
+     * @return - bool
+     */
+    bool operator==(const WeightedItem<T>& other);
+
  private:
     T data;           // data stored in container
     unsigned weight;  // weight of the container
@@ -145,6 +163,18 @@ void WeightedItem<T>::output(std::ostream& outs) const {
     outs << weight;
 }
 
+template <class T>
+WeightedItem<T>& WeightedItem<T>::operator=(const WeightedItem<T>& other) {
+    data = other.data;
+    weight = other.weight;
+    return *this;
+}
+
+template <class T>
+bool WeightedItem<T>::operator==(const WeightedItem<T>& other) {
+    return (data == other.data && weight == other.weight);
+}
+
 // Non-member functions implementation
 
 /**
@@ -174,5 +204,6 @@ std::istream& operator>>(std::istream& ins, WeightedItem<T>& item) {
     item.input(ins);
     return ins;
 }
+
 
 #endif
