@@ -17,8 +17,8 @@ public:
     // Adding items
     void add(const WeightedItem<T>& item, int index = -1);
     void add(const T& data, const unsigned& weight, int index = -1);
-    void insert(const WeightedItem<T>& item, int index = 0);
-    void insert(const T& data, const unsigned& weight, int index = 0);
+    void insert(const WeightedItem<T>& item, int index = 1);
+    void insert(const T& data, const unsigned& weight, int index = 1);
 
     // Remove items
     // void remove(int index);
@@ -29,7 +29,8 @@ public:
 
     // Misc.
     int size() const;
-    WeightedItem<T>& at(int index) const;
+    const WeightedItem<T>& at(int index) const;
+    WeightedItem<T>& at(int index);
 
 
     // Randomize 
@@ -125,12 +126,12 @@ void WCont<T>::add(const WeightedItem<T>& item, int index) {
     }
     else {
         // Move all elements one to the right of index down by one
-        for (int i = used; i > index + 1; i--) {
+        for (int i = used; i > index; i--) {
             data[i] = data[i - 1];
         }
         
         // Set the element at index+1 to the item
-        data[index + 1] = item;
+        data[index] = item;
     }
 
     used++; // increment used
@@ -145,21 +146,25 @@ void WCont<T>::add(const T& data, const unsigned& weight, int index) {
 template <class T>
 void WCont<T>::insert(const WeightedItem<T>& item, int index) {
     // Handle invalid index
-    if (index < -1 || index > used) {
+    if (index < 0 || index > used) {
         return;
     }
-    
+
+    if (index == 0) {
+        index = 1;
+    }
+
     if (used == capacity) {
         resize();
     }
 
     // Move elements from the specified index to the end over by one
-    for (int i = used; i > index; i--) {
+    for (int i = used; i > index - 1; i--) {
         data[i] = data[i - 1];
     }
 
     // Insert data and increment used
-    data[index] = item;
+    data[index - 1] = item;
     used++;
 }
 
@@ -175,7 +180,18 @@ int WCont<T>::size() const {
 }
 
 template <class T>
-WeightedItem<T>& WCont<T>::at(int index) const{
+WeightedItem<T>& WCont<T>::at(int index) {
+    if (index < 0 || index >= used) {
+        throw std::out_of_range("Index out of range");
+    }
+    return data[index];
+}
+
+template <class T>
+const WeightedItem<T>& WCont<T>::at(int index) const {
+    if (index < 0 || index >= used) {
+        throw std::out_of_range("Index out of range");
+    }
     return data[index];
 }
 #endif
