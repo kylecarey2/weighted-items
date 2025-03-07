@@ -21,8 +21,9 @@ public:
     void insert(const T& data, const unsigned& weight, int index = 1);
 
     // Remove items
-    // void remove(int index);
-    // void remove(const WeightedItem<T>& item);
+    void remove(int index);
+    void remove(const WeightedItem<T>& item);
+    void remove_all(const WeightedItem<T>& item);
 
     // bool exists(const WeightedItem<T>& item);
     // bool exists(const T& data, const unsigned& weight);
@@ -173,6 +174,44 @@ void WCont<T>::insert(const T& data, const unsigned& weight, int index) {
     WeightedItem<T> item(data, weight);
     insert(item, index);
 }
+
+template <class T>
+void WCont<T>::remove(int index) {
+    if (index < 0 || index > used) {
+        return;
+    } 
+    else {
+        // Move elements to the left by one then set used--
+        for (int i = index; i < used; i++) {
+            data[i] = data[i + 1];
+        }
+
+        used--;
+    }
+}
+
+template <class T>
+void WCont<T>::remove(const WeightedItem<T>& item) {
+    // Find element, remove it, then return
+    for (int i = 0; i < used; i++) {
+        if (item == data[i]) {
+            remove(i);
+            return;
+        }
+    }
+}
+
+template <class T>
+void WCont<T>::remove_all(const WeightedItem<T>& item) {
+    // Find element, remove it, continue on until end of list
+    for (int i = 0; i < used; i++) {
+        if (item == data[i]) {
+            remove(i);
+            i--;
+        }
+    }
+}
+
 
 template <class T>
 int WCont<T>::size() const {
