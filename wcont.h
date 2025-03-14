@@ -25,16 +25,21 @@ public:
     void remove(const WeightedItem<T>& item);
     void remove_all(const WeightedItem<T>& item);
 
-    // bool exists(const WeightedItem<T>& item);
-    // bool exists(const T& data, const unsigned& weight);
+    bool exists(const WeightedItem<T>& item) const;
+    bool exists(const T& data, const unsigned& weight) const;
 
     // Misc.
     int size() const;
+    void sort(); // sorts from least weight to greatest
+    void shuffle();
     const WeightedItem<T>& at(int index) const;
     WeightedItem<T>& at(int index);
 
 
     // Randomize 
+    void randomize_this();
+    WCont<T> randomize() const;
+    WCont<T> randomize_bubble() const;
 
 
 private:
@@ -182,7 +187,7 @@ void WCont<T>::remove(int index) {
     } 
     else {
         // Move elements to the left by one then set used--
-        for (int i = index; i < used; i++) {
+        for (int i = index; i < used - 1; i++) {
             data[i] = data[i + 1];
         }
 
@@ -212,10 +217,53 @@ void WCont<T>::remove_all(const WeightedItem<T>& item) {
     }
 }
 
+template <class T>
+bool WCont<T>::exists(const WeightedItem<T>& item) const{
+    for (int i = 0; i < used; i++) {
+        if (item == data[i]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template <class T>
+bool WCont<T>::exists(const T& data, const unsigned& weight) const {
+    WeightedItem<T> item(data, weight);
+    return exists(item);
+}
+
 
 template <class T>
 int WCont<T>::size() const {
     return used;
+}
+
+template <class T>
+void WCont<T>::sort() {
+    for (int i = 0; i < used - 1; i++) {
+        int min = i;
+        for (int j = i + 1; j < used; j++) {
+            if (data[j] < data[min] ) {
+                min = j;
+            }
+        }
+
+        std::swap(data[i], data[min]);
+    }
+}
+
+template <class T>
+void WCont<T>::shuffle() {
+    // Iterate through the array from the end to the beginning
+    for (int i = used - 1; i > 0; --i) {
+        // Generate a random index j between 0 and i (inclusive)
+        int j = std::rand() % (i + 1);
+
+        // Swap arr[i] and arr[j]
+        std::swap(data[i], data[j]);
+    }
 }
 
 template <class T>
@@ -233,4 +281,44 @@ const WeightedItem<T>& WCont<T>::at(int index) const {
     }
     return data[index];
 }
+
+template <class T>
+void WCont<T>::randomize_this() {
+    *this = this->randomize();
+}
+
+template <class T>
+WCont<T> WCont<T>::randomize() const{
+    WCont<T> copy(*this);
+    copy.shuffle();
+
+    // Add up total weights
+    int totalWeight = 0;
+    for (int i = 0; i < copy.used; i++) {
+        totalWeight += copy.at(i).get_weight();
+    }
+
+    WCont<T> randomized;
+    while (copy.used != 0) {
+        int pos = std::rand() % totalWeight;
+        // std::cout << "\t" << copy.used << "\n";
+        // std::cout << pos << "\n";
+        int accumulatedWeight = 0;
+
+        for (int i = 0; i < copy.used; i++) {
+            accumulatedWeight += copy.at(i).get_weight();
+            if (accumulatedWeight >= pos) {
+                randomized.add(copy.at(i));
+                totalWeight -= copy.at(i).get_weight();
+                copy.remove(i);
+                break;
+            }
+        }
+    }   
+
+    return randomized;
+}
+
+
+
 #endif
