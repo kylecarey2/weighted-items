@@ -22,15 +22,16 @@ WeightedItem<double> item2(24.5, 5); // Holds 24.5 with a weight of 5
 item1.set_data("Hello World"); // Data it holds is "Hello World"
 item1.set_weight(25); // Has a weight of 25
 ```
-Full documentation and member functions can be found in weightedItem.h. Using these with wcont.h is easy. It can be done as shown in the code snippet below.
+Full documentation and member functions can be found in weightedItem.h. Implementation can be found in weightedItem.tpp. Using these with wcont.h is easy. It can be done as shown in the code snippet below. NOTE: It is important to seed the random number generator in your main program if you want to use the randomization member functions on any WCont objects. 
 ```cpp
+std::srand(time(NULL));
 WeightedItem<std::string> item3("GoodBye World", 5);
 WCont<std::string> container;
 container.add(item1); // Adds item1 to container
 container.add(item3); // Adds item3 to container
-container.remove(item1) // Removes item1 from container
+container.remove(item1); // Removes item1 from container
 ```
-As before, the full member functions can be found in wcont.h. It is important to use the same datatype of data in the WCont as you did in the WeightedItem. If you wish to use a std::vector or a std::list with the WeightedItems instead, you can do so. The WCont object was for me to practice with dynamic memory and to build my own custom member functions. 
+As before, the full member functions can be found in wcont.h with their implementation in wcont.tpp. It is important to use the same datatype of data in the WCont as you did in the WeightedItem. If you wish to use a std::vector or a std::list with the WeightedItems instead, you can do so. The WCont object was for me to practice with dynamic memory and to build my own custom member functions. 
 ```cpp
 #include <list>
 
