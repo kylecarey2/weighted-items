@@ -1,5 +1,3 @@
-#include "weightedItem.h"
-
 template <class T>
 WeightedItem<T>::WeightedItem(T d, unsigned value) {
     data = d;

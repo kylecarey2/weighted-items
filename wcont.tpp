@@ -1,5 +1,3 @@
-#include "wcont.h"
-
 template <class T>
 WCont<T>::WCont() {
     used = 0;
