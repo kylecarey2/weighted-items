@@ -14,7 +14,7 @@ class WeightedItem {
      * @param d - data to store in container along with the weight
      * @param value- the amount of weight to give the object
      */
-    WeightedItem(T d = T(), unsigned value = 0);
+    WeightedItem(T d = T(), unsigned value = 1);
 
     // Getters
     /**
@@ -99,83 +99,21 @@ class WeightedItem {
      * @param other - right hand side object
      * @return - bool
      */
-    bool operator==(const WeightedItem<T>& other);
+    bool operator==(const WeightedItem<T>& other) const;
+
+    /**
+     * Function:    operator<
+     *              returns a boolean of if the weight of the object on the left is less than the object on the right
+     *
+     * @param other - WeightedItem object on the right
+     * @return - boolean
+     */
+    bool operator<(const WeightedItem<T>& other) const;
 
  private:
     T data;           // data stored in container
     unsigned weight;  // weight of the container
 };
-
-// Class Implementation
-template <class T>
-WeightedItem<T>::WeightedItem(T d, unsigned value) {
-    data = d;
-    weight = value;
-}
-
-template <class T>
-unsigned WeightedItem<T>::get_weight() const {
-    return weight;
-}
-
-template <class T>
-T WeightedItem<T>::get_data() const {
-    return data;
-}
-
-template <class T>
-void WeightedItem<T>::set_data(T d) {
-    data = d;
-}
-
-template <class T>
-void WeightedItem<T>::set_weight(unsigned value) {
-    weight = value;
-}
-
-template <class T>
-void WeightedItem<T>::add_weight(unsigned value) {
-    weight += value;
-}
-
-template <class T>
-void WeightedItem<T>::remove_weight(unsigned value) {
-    if (weight < value) {
-        weight = 0;
-    }
-    else {
-        weight -= value;
-    }
-}
-
-template <class T>
-void WeightedItem<T>::input(std::istream& ins) {
-    ins >> std::ws;
-    ins >> data;
-    ins >> std::ws;
-    ins >> weight;
-}
-
-template <class T>
-void WeightedItem<T>::output(std::ostream& outs) const {
-    outs << data;
-    outs << " - ";
-    outs << weight;
-}
-
-template <class T>
-WeightedItem<T>& WeightedItem<T>::operator=(const WeightedItem<T>& other) {
-    data = other.data;
-    weight = other.weight;
-    return *this;
-}
-
-template <class T>
-bool WeightedItem<T>::operator==(const WeightedItem<T>& other) {
-    return (data == other.data && weight == other.weight);
-}
-
-// Non-member functions implementation
 
 /**
  * Function:    operator<<
@@ -186,10 +124,7 @@ bool WeightedItem<T>::operator==(const WeightedItem<T>& other) {
  * @return - output stream
  */
 template <class T>
-std::ostream& operator<<(std::ostream& outs, const WeightedItem<T>& item) {
-    item.output(outs);
-    return outs;
-}
+std::ostream& operator<<(std::ostream& outs, const WeightedItem<T>& item);
 
 /**
  * Function:    operator>>
@@ -200,10 +135,8 @@ std::ostream& operator<<(std::ostream& outs, const WeightedItem<T>& item) {
  * @return - input stream
  */
 template <class T>
-std::istream& operator>>(std::istream& ins, WeightedItem<T>& item) {
-    item.input(ins);
-    return ins;
-}
+std::istream& operator>>(std::istream& ins, WeightedItem<T>& item);
 
+#include "weightedItem.tpp"
 
 #endif

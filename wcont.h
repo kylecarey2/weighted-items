@@ -6,43 +6,186 @@
 // Class declaration
 template <class T>
 class WCont {
-public:
+ public:
     // Big 4
+    /**
+     * Function:    WCont
+     *              default constructor that creates the dynamic array
+     */
     WCont();
+
+    /**
+     * Function:    WCont
+     *              copy constructor performs deep copy on object passed in
+     *
+     * @param other - WCont object of the same type
+     */
     WCont(const WCont<T>& other);
+
+    /**
+     * Function:    ~WCont
+     *              destructor. Destroys all dynamic data
+     *
+     */
     ~WCont();
+
+    /**
+     * Function:    operator==
+     *              performs a deep copy freeing any memory in the process and returns the new object
+     *
+     * @param other  - WCont object
+     * @return - WCont object
+     */
     WCont<T>& operator=(const WCont<T>& other);
 
     // Feature functions
     // Adding items
+    /**
+     * Function:    add
+     *              adds the WeightedItem to the array at the index specified
+     *
+     * @param item - a WeightedItem object
+     * @param index - the index to add the object to in the array
+     * @return - void
+     */
     void add(const WeightedItem<T>& item, int index = -1);
+
+    /**
+     * Function:    add
+     *              adds the data and weight to the array as a WeightedItem after the index specified
+     *
+     * @param data - data of the specified datatype of the container
+     * @param data - weight of the specified data
+     * @param index - the index to add the object to in the array
+     * @return - void
+     */
     void add(const T& data, const unsigned& weight, int index = -1);
+
+    /**
+     * Function:    insert
+     *              inserts the WeightedItem before the specified index
+     *
+     * @param item - a WeightedItem object
+     * @param index - index to insert the object at
+     * @return - void
+     */
     void insert(const WeightedItem<T>& item, int index = 1);
+
+    /**
+     * Function:    insert
+     *              inserts the data and weight as a WeightedItem before the specified index
+     *
+     * @param data - data of the specified datatype of the container
+     * @param data - weight of the specified data
+     * @param index - index to insert the object at
+     * @return - void
+     */
     void insert(const T& data, const unsigned& weight, int index = 1);
 
     // Remove items
+    /**
+     * Function:    remove
+     *              removes the WeightedItem at the index specified
+     *
+     * @param index - the index to remove the object at
+     * @return - void
+     */
     void remove(int index);
+
+    /**
+     * Function:    remove
+     *              removes the WeightedItem specifed from the container
+     *
+     * @param item - a WeightedItem object
+     * @return - void
+     */
     void remove(const WeightedItem<T>& item);
+
+    /**
+     * Function:    remove_all
+     *              removes all instances of the WeightedItem from the container
+     *
+     * @param item - a WeightedItem object
+     * @return - void
+     */
     void remove_all(const WeightedItem<T>& item);
 
+    /**
+     * Function:    exists
+     *              returns if the object exists in the container as a boolean
+     *
+     * @param item - a WeightedItem object
+     * @return - bool
+     */
     bool exists(const WeightedItem<T>& item) const;
+
+    /**
+     * Function:    exists
+     *              returns if a object of the data and weight exists in the container as a boolean
+     *
+     * @param item - a WeightedItem object
+     * @return - bool
+     */
     bool exists(const T& data, const unsigned& weight) const;
 
     // Misc.
+
+    /**
+     * Function:    size
+     *              returns how many items are in the container
+     *
+     * @return - size of container, as int
+     */
     int size() const;
-    void sort(); // sorts from least weight to greatest
+
+    /**
+     * Function:    sort
+     *              sorts all WeightedItems in the container from the least weight to the greatest weight
+     */
+    void sort();
+
+    /**
+     * Function:    shuffle
+     *              shuffles the WeightedItems in the container into a random order.
+     *              Uses the Fisher-Yates shuffle algorithm
+     */
     void shuffle();
+
+    /**
+     * Function:    at
+     *              returns the WeightedItem at the specified index. Returns out_of_range error if invalid index
+     *
+     * @param index - index of the container
+     * @return - const WeightedItem&
+     */
     const WeightedItem<T>& at(int index) const;
+
+    /**
+     * Function:    at
+     *              returns the WeightedItem at the specified index. Returns out_of_range error if invalid index
+     *
+     * @param index - index of the container
+     * @return - WeightedItem&
+     */
     WeightedItem<T>& at(int index);
 
-
-    // Randomize 
+    // Randomize
+    /**
+     * Function:    randomize_this
+     *              randomizes the container and edits it directly
+     */
     void randomize_this();
+
+    /**
+     * Function:    randomize
+     *              randomizes the container and returns a new WCont container that is randomized. Does not edit current container.
+     *
+     * @param paramName - paramDescription
+     * @return - whatIsReturned
+     */
     WCont<T> randomize() const;
-    WCont<T> randomize_bubble() const;
 
-
-private:
+ private:
     WeightedItem<T>* data;
     int used;
     int capacity;
@@ -51,274 +194,6 @@ private:
     void resize();
 };
 
-// Implementation
-template <class T>
-WCont<T>::WCont() {
-    used = 0;
-    capacity = 5;
-    data = new WeightedItem<T>[capacity]; // create an array
-}
-
-template <class T>
-WCont<T>::~WCont() {
-    delete[] data;
-}
-
-template <class T>
-WCont<T>::WCont(const WCont<T>& other) {
-    // Copy member data from other to this
-    used = other.used;
-    capacity = other.capacity;
-
-    data = new WeightedItem<T>[capacity];
-    for (int i = 0; i < other.used; i++) {
-        data[i] = other.data[i];
-    }
-}
-
-template <class T>
-WCont<T>& WCont<T>::operator=(const WCont<T>& other) {
-    // Return object if this and other are the same object
-    if (this == &other) {
-        return *this;
-    }
-
-    // Free current memory of this
-    delete[] data;
-
-    // Copy member data from other to this
-    used = other.used;
-    capacity = other.capacity;
-
-    data = new WeightedItem<T>[capacity];
-    for (int i = 0; i < other.used; i++) {
-        data[i] = other.data[i];
-    }
-
-    return *this;
-}
-
-template <class T>
-void WCont<T>::resize() {
-    // Update capacity and create a temporary array with new capacity
-    capacity += 5;
-    WeightedItem<T>* tmp = new WeightedItem<T>[capacity];
-
-    // Copy the elements from data to tmp
-    for (int i = 0; i < used; i++) {
-        tmp[i] = data[i];
-    }
-
-    // Free old array and assign data the new array
-    delete[] data;
-    data = tmp;
-}
-
-template <class T>
-void WCont<T>::add(const WeightedItem<T>& item, int index) {
-    // Handle invalid index
-    if (index < -1 || index > used) {
-        return;
-    }
-
-    if (used == capacity) {
-        resize();
-    }
-
-
-    // Add to end if index is not specified
-    if (index == -1) {
-        data[used] = item;
-    }
-    else {
-        // Move all elements one to the right of index down by one
-        for (int i = used; i > index; i--) {
-            data[i] = data[i - 1];
-        }
-        
-        // Set the element at index+1 to the item
-        data[index] = item;
-    }
-
-    used++; // increment used
-}
-
-template <class T>
-void WCont<T>::add(const T& data, const unsigned& weight, int index) {
-    WeightedItem<T> item(data, weight);
-    add(item, index);
-}
-
-template <class T>
-void WCont<T>::insert(const WeightedItem<T>& item, int index) {
-    // Handle invalid index
-    if (index < 0 || index > used) {
-        return;
-    }
-
-    if (index == 0) {
-        index = 1;
-    }
-
-    if (used == capacity) {
-        resize();
-    }
-
-    // Move elements from the specified index to the end over by one
-    for (int i = used; i > index - 1; i--) {
-        data[i] = data[i - 1];
-    }
-
-    // Insert data and increment used
-    data[index - 1] = item;
-    used++;
-}
-
-template <class T>
-void WCont<T>::insert(const T& data, const unsigned& weight, int index) {
-    WeightedItem<T> item(data, weight);
-    insert(item, index);
-}
-
-template <class T>
-void WCont<T>::remove(int index) {
-    if (index < 0 || index > used) {
-        return;
-    } 
-    else {
-        // Move elements to the left by one then set used--
-        for (int i = index; i < used - 1; i++) {
-            data[i] = data[i + 1];
-        }
-
-        used--;
-    }
-}
-
-template <class T>
-void WCont<T>::remove(const WeightedItem<T>& item) {
-    // Find element, remove it, then return
-    for (int i = 0; i < used; i++) {
-        if (item == data[i]) {
-            remove(i);
-            return;
-        }
-    }
-}
-
-template <class T>
-void WCont<T>::remove_all(const WeightedItem<T>& item) {
-    // Find element, remove it, continue on until end of list
-    for (int i = 0; i < used; i++) {
-        if (item == data[i]) {
-            remove(i);
-            i--;
-        }
-    }
-}
-
-template <class T>
-bool WCont<T>::exists(const WeightedItem<T>& item) const{
-    for (int i = 0; i < used; i++) {
-        if (item == data[i]) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-template <class T>
-bool WCont<T>::exists(const T& data, const unsigned& weight) const {
-    WeightedItem<T> item(data, weight);
-    return exists(item);
-}
-
-
-template <class T>
-int WCont<T>::size() const {
-    return used;
-}
-
-template <class T>
-void WCont<T>::sort() {
-    for (int i = 0; i < used - 1; i++) {
-        int min = i;
-        for (int j = i + 1; j < used; j++) {
-            if (data[j] < data[min] ) {
-                min = j;
-            }
-        }
-
-        std::swap(data[i], data[min]);
-    }
-}
-
-template <class T>
-void WCont<T>::shuffle() {
-    // Iterate through the array from the end to the beginning
-    for (int i = used - 1; i > 0; --i) {
-        // Generate a random index j between 0 and i (inclusive)
-        int j = std::rand() % (i + 1);
-
-        // Swap arr[i] and arr[j]
-        std::swap(data[i], data[j]);
-    }
-}
-
-template <class T>
-WeightedItem<T>& WCont<T>::at(int index) {
-    if (index < 0 || index >= used) {
-        throw std::out_of_range("Index out of range");
-    }
-    return data[index];
-}
-
-template <class T>
-const WeightedItem<T>& WCont<T>::at(int index) const {
-    if (index < 0 || index >= used) {
-        throw std::out_of_range("Index out of range");
-    }
-    return data[index];
-}
-
-template <class T>
-void WCont<T>::randomize_this() {
-    *this = this->randomize();
-}
-
-template <class T>
-WCont<T> WCont<T>::randomize() const{
-    WCont<T> copy(*this);
-    copy.shuffle();
-
-    // Add up total weights
-    int totalWeight = 0;
-    for (int i = 0; i < copy.used; i++) {
-        totalWeight += copy.at(i).get_weight();
-    }
-
-    WCont<T> randomized;
-    while (copy.used != 0) {
-        int pos = std::rand() % totalWeight;
-        // std::cout << "\t" << copy.used << "\n";
-        // std::cout << pos << "\n";
-        int accumulatedWeight = 0;
-
-        for (int i = 0; i < copy.used; i++) {
-            accumulatedWeight += copy.at(i).get_weight();
-            if (accumulatedWeight >= pos) {
-                randomized.add(copy.at(i));
-                totalWeight -= copy.at(i).get_weight();
-                copy.remove(i);
-                break;
-            }
-        }
-    }   
-
-    return randomized;
-}
-
-
+#include "wcont.tpp"
 
 #endif
