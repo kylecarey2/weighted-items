@@ -1,6 +1,6 @@
 # Weighted-Items-And-Container
 
-This project was made to help me create a random algorithm that included some weight to it. I started this to see how different weights on objects affected placements in an ordered list. This can be used to create a system that creates a randomized list that takes merit into account. I created a custom template class called WeightedItem that holds any datatype and a weight value to go along with it. Along with that, I created a dynamic array container (WCont) that stores WeightedItem objects with many member functions including some random functions to help my use case for this project. The only external library used for this was <iostream>. 
+This project was made to help me create a random algorithm that included some weight to it. I started this to see how different weights on objects affected placements in an ordered list. This can be used to create a system that creates a randomized list that takes merit into account. I created a custom template class called WeightedItem that holds any datatype and a weight value to go along with it. Along with that, I created a dynamic array container (WCont) that stores WeightedItem objects with many member functions including some random functions to help my use case for this project.
 
 ## Compilation
 
